@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-/* Layout: atelier table — paper pattern sheet on the left, garment preview on the right, piece controls under the sheet. */
+/* Layout: studio de marquage — grand aperçu du maillot à gauche, panneau de réglages (zones puis logos) à droite. */
 :root{
   --paper:#EEF1EC; --sheet:#F8FAF6; --grid:#C9D3CB; --ink:#1B2230; --ink-2:#5A6372;
   --line:#D2D9D2; --accent:#E5336D; --accent-ink:#FFFFFF; --panel:#FFFFFF;
@@ -28,317 +28,387 @@
 *{box-sizing:border-box}
 body{background:var(--paper);color:var(--ink);font-family:var(--display);font-size:15px;line-height:1.5;margin:0;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 40px}
-.wrap{max-width:1320px;margin:0 auto;display:grid;gap:18px}
+.wrap{max-width:1360px;margin:0 auto;display:grid;gap:18px}
 header{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:12px}
 h1{font-size:clamp(30px,5vw,46px);line-height:1;letter-spacing:-.035em;margin:0;font-weight:800;text-wrap:balance}
 h1 em{font-family:var(--serif);font-weight:400;letter-spacing:-.01em}
-.sub{color:var(--ink-2);margin:6px 0 0;max-width:62ch}
+.sub{color:var(--ink-2);margin:6px 0 0;max-width:66ch}
 .tag{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.tag a{color:inherit}
 .grid{display:grid;gap:18px;grid-template-columns:1fr}
-@media(min-width:980px){.grid{grid-template-columns:1.15fr 1fr}}
+@media(min-width:1020px){.grid{grid-template-columns:1.7fr 1fr;align-items:start}}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;min-width:0;overflow:hidden}
 .card-h{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
 .card-h b{font-size:15px}
 svg{display:block;width:100%;height:auto}
-#pattern{background:var(--sheet);touch-action:none}
-#preview{background:var(--sheet)}
-.piece{cursor:pointer}
-.piece .cut{fill:none;stroke:var(--ink);stroke-width:2.5}
-.piece .seam{fill:none;stroke:var(--ink-2);stroke-width:1.6;stroke-dasharray:7 6}
-.piece.sel .cut{stroke:var(--accent);stroke-width:4}
-.piece.drop .cut{stroke:var(--accent);stroke-dasharray:10 6}
-.plabel{font-family:var(--mono);font-size:15px;fill:var(--ink);font-weight:600;letter-spacing:.06em;pointer-events:none}
-.pnote{font-family:var(--mono);font-size:12px;fill:var(--ink-2);pointer-events:none}
-.grain{stroke:var(--ink);stroke-width:1.6;fill:none;pointer-events:none;opacity:.45}
-.controls{display:grid;gap:14px;padding:16px}
+#stage,#flat{background:var(--sheet);touch-action:none;user-select:none}
+.plabel{font-family:var(--mono);font-size:14px;fill:var(--ink);font-weight:600;letter-spacing:.06em;pointer-events:none}
+.pnote{font-family:var(--mono);font-size:11px;fill:var(--ink-2);pointer-events:none}
+.part{cursor:pointer}
+.part.sel>.outline{stroke:var(--accent);stroke-opacity:1;stroke-width:4}
+.logo{cursor:grab}
+.logo.sel>.box{stroke:var(--accent);stroke-width:3;stroke-dasharray:8 6;fill:none}
+.vlabel{font-family:var(--mono);font-size:22px;fill:var(--ink-2);letter-spacing:.12em}
+.panel{display:grid;gap:0}
+.sec{display:grid;gap:12px;padding:16px;border-bottom:1px solid var(--line)}
+.sec:last-child{border-bottom:0}
+.sec h2{font-size:13px;letter-spacing:.1em;text-transform:uppercase;margin:0;color:var(--ink-2);font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:8px}
 .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.chip{border:1px solid var(--line);background:transparent;color:var(--ink);padding:7px 13px;border-radius:999px;font:inherit;font-size:14px;cursor:pointer}
+.chip{border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;font:inherit;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
 .chip[aria-pressed="true"]{background:var(--ink);color:var(--panel);border-color:var(--ink)}
-.chip .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--accent);margin-left:6px;vertical-align:middle}
-.btn{display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);padding:9px 15px;border-radius:999px;font:inherit;font-weight:600;font-size:14px;cursor:pointer}
+.chip .sq{width:12px;height:12px;border-radius:3px;border:1px solid rgba(0,0,0,.25);flex:none}
+.btn{display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);padding:8px 14px;border-radius:999px;font:inherit;font-weight:600;font-size:14px;cursor:pointer}
 .btn.solid{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .btn:disabled{opacity:.4;cursor:not-allowed}
 .btn:focus-visible,.chip:focus-visible,input:focus-visible,.sw:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.sliders{display:grid;gap:10px;grid-template-columns:1fr}
-@media(min-width:560px){.sliders{grid-template-columns:1fr 1fr}}
-.sl{display:grid;gap:4px}
+.sl{display:grid;gap:2px}
 .sl label{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2)}
 .sl output{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--ink)}
+.sliders{display:grid;gap:10px;grid-template-columns:1fr 1fr}
 input[type=range]{width:100%;accent-color:var(--accent)}
-.sw{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);cursor:pointer;padding:0}
+.sw{width:28px;height:28px;border-radius:50%;border:2px solid var(--line);cursor:pointer;padding:0}
 .sw[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 2px var(--panel) inset}
 input[type=color]{width:36px;height:30px;border:1px solid var(--line);border-radius:8px;background:none;padding:2px;cursor:pointer}
 .hint{font-size:13px;color:var(--ink-2);margin:0}
-.views{display:flex;gap:6px}
 .ex{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:2px 8px}
 input[type=file]{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.seg button{border:0;background:transparent;color:var(--ink);font:inherit;font-size:13px;padding:5px 11px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--panel)}
+.empty{font-size:13px;color:var(--ink-2)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
 <div class="wrap">
   <header>
     <div>
-      <span class="tag"><a href="/" style="color:inherit">← Chloé Bouffi</a> · Atelier · Taille M</span>
+      <span class="tag"><a href="/">← Chloé Bouffi</a> · Maillot coupe raglan</span>
       <h1>Patron <em>T-shirt</em></h1>
-      <p class="sub">Choisis une pièce du patron, importe une image, ajuste-la : l'aperçu du t-shirt se met à jour en direct. Glisse l'image dans la pièce pour la déplacer.</p>
+      <p class="sub">Clique sur une zone du t-shirt pour choisir sa couleur ou y mettre un motif, puis ajoute tes logos par-dessus. Glisse un motif ou un logo pour le déplacer.</p>
     </div>
     <span class="ex" id="exBadge">Visuels d'exemple</span>
   </header>
 
   <div class="grid">
-    <section class="card" aria-label="Patron">
-      <div class="card-h"><b>Patron à plat</b><span class="tag">Valeurs de couture 1 cm</span></div>
-      <svg id="pattern" viewBox="0 0 1200 640" role="img" aria-label="Patron du t-shirt en quatre pièces">
-        <defs>
-          <pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1.1" fill="var(--grid)"/></pattern>
-        </defs>
-        <rect width="1200" height="640" fill="url(#dots)"/>
-        <g id="patternPieces"></g>
-      </svg>
-      <div class="controls">
-        <div class="row" id="pieceChips" role="group" aria-label="Pièce sélectionnée"></div>
-        <div class="row">
-          <label class="btn solid" for="file">Importer une image</label>
-          <input type="file" id="file" accept="image/*">
-          <button class="btn" id="center" type="button">Recentrer</button>
-          <button class="btn" id="copySleeve" type="button">Copier sur l'autre manche</button>
-          <button class="btn" id="remove" type="button">Retirer l'image</button>
-        </div>
-        <div class="sliders">
-          <div class="sl"><label for="scale">Taille <output id="scaleOut">100 %</output></label><input id="scale" type="range" min="10" max="300" value="100"></div>
-          <div class="sl"><label for="rot">Rotation <output id="rotOut">0°</output></label><input id="rot" type="range" min="-180" max="180" value="0"></div>
-        </div>
-        <p class="hint">Astuce : tu peux aussi déposer un fichier directement sur une pièce, ou coller une image (Cmd+V) dans la pièce sélectionnée.</p>
-      </div>
-    </section>
-
+    <div style="display:grid;gap:18px;min-width:0">
     <section class="card" aria-label="Aperçu">
       <div class="card-h">
         <b>Aperçu</b>
-        <div class="views" role="group" aria-label="Vue">
-          <button class="chip" data-view="both" aria-pressed="true" type="button">Devant + dos</button>
-          <button class="chip" data-view="front" aria-pressed="false" type="button">Devant</button>
-          <button class="chip" data-view="back" aria-pressed="false" type="button">Dos</button>
+        <div class="seg" role="group" aria-label="Vue">
+          <button data-view="both" aria-pressed="true" type="button">Devant + dos</button>
+          <button data-view="front" aria-pressed="false" type="button">Devant</button>
+          <button data-view="back" aria-pressed="false" type="button">Dos</button>
         </div>
       </div>
-      <svg id="preview" viewBox="0 0 1100 600" role="img" aria-label="Aperçu du t-shirt assemblé">
-        <g id="previewGarments"></g>
+      <svg id="stage" viewBox="0 0 1240 700" role="img" aria-label="Aperçu du t-shirt">
+        <defs id="defs">
+          <pattern id="rib" width="5" height="5" patternUnits="userSpaceOnUse"><rect width="2" height="5" fill="#000" fill-opacity=".14"/></pattern>
+          <linearGradient id="shadeH" x1="0" x2="1" y1="0" y2="0">
+            <stop offset="0" stop-color="#000" stop-opacity=".22"/>
+            <stop offset=".25" stop-color="#000" stop-opacity=".14"/>
+            <stop offset=".34" stop-color="#000" stop-opacity=".04"/>
+            <stop offset=".5" stop-color="#fff" stop-opacity=".10"/>
+            <stop offset=".66" stop-color="#000" stop-opacity=".04"/>
+            <stop offset=".75" stop-color="#000" stop-opacity=".14"/>
+            <stop offset="1" stop-color="#000" stop-opacity=".22"/>
+          </linearGradient>
+          <linearGradient id="shadeV" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0" stop-color="#fff" stop-opacity=".08"/>
+            <stop offset=".75" stop-color="#000" stop-opacity="0"/>
+            <stop offset="1" stop-color="#000" stop-opacity=".14"/>
+          </linearGradient>
+        </defs>
+        <g id="views"></g>
       </svg>
-      <div class="controls">
-        <div class="row" id="fabric" role="group" aria-label="Couleur du tissu">
-          <span class="tag" style="margin-right:4px">Tissu</span>
-        </div>
-        <p class="hint">L'aperçu applique un ombrage léger pour simuler le tombé du tissu. Pour le présenter, fais une capture d'écran de cette zone.</p>
-      </div>
     </section>
+    <section class="card" aria-label="Patron à plat">
+      <div class="card-h"><b>Patron à plat</b><span class="tag">Valeurs de couture 1 cm</span></div>
+      <svg id="flat" viewBox="0 0 1140 690" role="img" aria-label="Pièces du patron à plat">
+        <defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1.1" fill="var(--grid)"/></pattern></defs>
+        <rect width="1140" height="690" fill="url(#dots)"/>
+        <g id="flatPieces"></g>
+      </svg>
+    </section>
+    </div>
+
+    <aside class="card panel" aria-label="Réglages">
+      <div class="sec">
+        <h2>Zone <span class="tag" id="zoneName"></span></h2>
+        <div class="row" id="zoneChips" role="group" aria-label="Zones"></div>
+      </div>
+      <div class="sec">
+        <h2>Couleur</h2>
+        <div class="row" id="swatches"></div>
+      </div>
+      <div class="sec">
+        <h2>Motif de fond</h2>
+        <div class="row">
+          <label class="btn solid" for="zoneFile">Importer un motif</label>
+          <input type="file" id="zoneFile" accept="image/*">
+          <button class="btn" id="zoneRemove" type="button">Retirer</button>
+        </div>
+        <div class="sliders">
+          <div class="sl"><label for="zScale">Taille <output id="zScaleOut">100 %</output></label><input id="zScale" type="range" min="20" max="300" value="100"></div>
+          <div class="sl"><label for="zRot">Rotation <output id="zRotOut">0°</output></label><input id="zRot" type="range" min="-180" max="180" value="0"></div>
+        </div>
+        <div class="row">
+          <button class="btn" id="applyAll" type="button">Mettre ce motif sur tout le t-shirt</button>
+        </div>
+        <p class="hint">Le motif est raccord d'une zone à l'autre : appliqué partout, il continue d'une pièce à la suivante comme en sublimation.</p>
+      </div>
+      <div class="sec">
+        <h2>Logos <span class="seg" role="group" aria-label="Face du logo"><button data-face="front" aria-pressed="true" type="button">Devant</button><button data-face="back" aria-pressed="false" type="button">Dos</button></span></h2>
+        <div class="row">
+          <label class="btn solid" for="logoFile">Ajouter un logo</label>
+          <input type="file" id="logoFile" accept="image/*">
+          <button class="btn" id="logoRemove" type="button">Supprimer</button>
+        </div>
+        <div class="row" id="logoChips"></div>
+        <div class="sliders">
+          <div class="sl"><label for="lSize">Taille <output id="lSizeOut">0</output></label><input id="lSize" type="range" min="30" max="520" value="150"></div>
+          <div class="sl"><label for="lRot">Rotation <output id="lRotOut">0°</output></label><input id="lRot" type="range" min="-180" max="180" value="0"></div>
+        </div>
+        <p class="hint">Un PNG à fond transparent rend comme un vrai marquage. Pour présenter, fais une capture d'écran de l'aperçu.</p>
+      </div>
+    </aside>
   </div>
 </div>
 
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <defs id="artDefs">
-    <linearGradient id="shadeBody" x1="0" x2="1" y1="0" y2="0">
-      <stop offset="0" stop-color="#000" stop-opacity=".22"/>
-      <stop offset=".18" stop-color="#000" stop-opacity=".04"/>
-      <stop offset=".5" stop-color="#fff" stop-opacity=".10"/>
-      <stop offset=".82" stop-color="#000" stop-opacity=".04"/>
-      <stop offset="1" stop-color="#000" stop-opacity=".24"/>
-    </linearGradient>
-    <linearGradient id="shadeSleeve" x1="0" x2="0" y1="0" y2="1">
-      <stop offset="0" stop-color="#000" stop-opacity=".18"/>
-      <stop offset=".6" stop-color="#000" stop-opacity=".05"/>
-      <stop offset="1" stop-color="#000" stop-opacity=".16"/>
-    </linearGradient>
-    <linearGradient id="fold" x1="0" x2="0" y1="0" y2="1">
-      <stop offset="0" stop-color="#000" stop-opacity="0"/>
-      <stop offset=".5" stop-color="#000" stop-opacity=".07"/>
-      <stop offset="1" stop-color="#000" stop-opacity="0"/>
-    </linearGradient>
-  </defs>
-</svg>
-
 <script>
-const NS = 'http://www.w3.org/2000/svg';
-const PIECES = {
-  devant: { name:'Devant', note:'Couper 1 au pli', w:500, h:700,
-    d:'M80 40 L180 0 Q250 110 320 0 L420 40 Q440 150 500 200 L500 700 L0 700 L0 200 Q60 150 80 40 Z',
-    neck:'M180 0 Q250 110 320 0' },
-  dos: { name:'Dos', note:'Couper 1 au pli', w:500, h:700,
-    d:'M80 40 L180 0 Q250 34 320 0 L420 40 Q440 150 500 200 L500 700 L0 700 L0 200 Q60 150 80 40 Z',
-    neck:'M180 0 Q250 34 320 0' },
-  mancheG: { name:'Manche gauche', note:'Couper 1', w:300, h:220,
-    d:'M0 220 L30 70 Q150 -40 270 70 L300 220 Z' },
-  mancheD: { name:'Manche droite', note:'Couper 1', w:300, h:220,
-    d:'M0 220 L30 70 Q150 -40 270 70 L300 220 Z' },
+const NS='http://www.w3.org/2000/svg';
+const el=(t,a={},p)=>{const n=document.createElementNS(NS,t);for(const k in a)n.setAttribute(k,a[k]);if(p)p.appendChild(n);return n;};
+const W=600,H=640;
+const mirror=d=>d.replace(/(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)/g,(m,x,y)=>`${+(W-x).toFixed(1)} ${y}`);
+
+// Géométrie (coupe raglan), unités du vêtement 600 × 640
+const SLEEVE_TOP='M57 184 Q111.5 99.5 230 40 L245 48 L190 165 Z';
+const SLEEVE_LOW='M190 165 L150 250 L95 290 L40 215 L57 184 Z';
+const CUFF='M40 215 L95 290 L113 277 L58 202 Z';
+const BODY_F='M245 48 Q300 104 355 48 L450 250 L440 620 L160 620 L150 250 Z';
+const BODY_B='M245 48 Q300 66 355 48 L450 250 L440 620 L160 620 L150 250 Z';
+const NECK_F='M232 44 Q300 106 368 44', NECK_B='M232 44 Q300 66 368 44';
+const INNER_F='M240 46 Q300 22 360 46 Q300 100 240 46 Z';
+
+const ZONES={
+  devant:{name:'Devant',color:'#F6A9C4'}, dos:{name:'Dos',color:'#F6A9C4'},
+  epaules:{name:'Épaules',color:'#A98BD6'}, manches:{name:'Manches',color:'#F6A9C4'},
+  col:{name:'Col',color:'#1F2A55'}, poignets:{name:'Bas de manche',color:'#1F2A55'}
 };
-const ORDER = ['devant','dos','mancheG','mancheD'];
-const LAYOUT = { devant:{x:30,y:30,s:.78}, dos:{x:450,y:30,s:.78}, mancheG:{x:880,y:40,s:.98}, mancheD:{x:880,y:320,s:.98} };
+const ZORDER=['devant','dos','epaules','manches','col','poignets'];
+const state={zone:'devant',view:'both',face:'front',logoSel:null,zones:{},logos:[]};
+ZORDER.forEach(z=>state.zones[z]={color:ZONES[z].color,img:null});
 
-const state = { sel:'devant', fabric:'#FFFFFF', view:'both', pieces:{} };
-ORDER.forEach(k=>state.pieces[k]={src:null,iw:1,ih:1,scale:1,ox:0,oy:0,rot:0});
-
-const el = (tag, attrs={}, parent) => { const n=document.createElementNS(NS,tag); for(const k in attrs) n.setAttribute(k,attrs[k]); if(parent) parent.appendChild(n); return n; };
-const defs = document.getElementById('artDefs');
-
-// Build art group per piece (fabric + image, clipped), reused in pattern and preview.
-ORDER.forEach(k=>{
-  const p=PIECES[k];
-  const cp=el('clipPath',{id:'clip-'+k},defs); el('path',{d:p.d},cp);
-  const g=el('g',{id:'art-'+k},defs);
-  const inner=el('g',{'clip-path':`url(#clip-${k})`},g);
-  el('rect',{id:'fab-'+k,width:p.w,height:p.h,x:0,y:0,fill:state.fabric},inner);
-  el('image',{id:'img-'+k,preserveAspectRatio:'none'},inner);
-  const sh=el('g',{id:'shade-'+k,'clip-path':`url(#clip-${k})`},defs);
-  el('rect',{width:p.w,height:p.h,fill:k.startsWith('manche')?'url(#shadeSleeve)':'url(#shadeBody)'},sh);
-});
-
-function renderImg(k){
-  const p=PIECES[k], s=state.pieces[k], img=document.getElementById('img-'+k);
-  if(!s.src){ img.removeAttribute('href'); img.setAttribute('width',0); img.setAttribute('height',0); return; }
-  const cover=Math.max(p.w/s.iw,p.h/s.ih);
-  const dw=s.iw*cover*s.scale, dh=s.ih*cover*s.scale;
-  const cx=p.w/2+s.ox, cy=p.h/2+s.oy;
-  img.setAttribute('href',s.src);
-  img.setAttribute('x',cx-dw/2); img.setAttribute('y',cy-dh/2);
-  img.setAttribute('width',dw); img.setAttribute('height',dh);
-  img.setAttribute('transform',`rotate(${s.rot} ${cx} ${cy})`);
+// parties : [zone, path, rib?]
+function partsFor(view){
+  const body=view==='front'?'devant':'dos';
+  return [
+    ['manches',SLEEVE_LOW],['manches',mirror(SLEEVE_LOW)],
+    ['epaules',SLEEVE_TOP],['epaules',mirror(SLEEVE_TOP)],
+    [body,view==='front'?BODY_F:BODY_B],
+    ['poignets',CUFF,true],['poignets',mirror(CUFF),true],
+  ];
 }
-function renderFabric(){ ORDER.forEach(k=>document.getElementById('fab-'+k).setAttribute('fill',state.fabric));
-  document.querySelectorAll('.pfab').forEach(r=>r.setAttribute('fill',state.fabric));
-  document.querySelectorAll('.collar').forEach(c=>c.setAttribute('stroke',shade(state.fabric,-0.12))); }
-function shade(hex,amt){ const n=parseInt(hex.slice(1),16); let r=n>>16,g=n>>8&255,b=n&255;
-  const f=v=>Math.max(0,Math.min(255,Math.round(v+(amt<0?v*amt:(255-v)*amt))));
-  return '#'+[f(r),f(g),f(b)].map(v=>v.toString(16).padStart(2,'0')).join(''); }
-
-// Pattern sheet
-const pg=document.getElementById('patternPieces');
-const pieceEls={};
-ORDER.forEach(k=>{
-  const p=PIECES[k], L=LAYOUT[k];
-  const t=L.rot?`translate(${L.x} ${L.y}) rotate(${L.rot}) scale(${L.s})`:`translate(${L.x} ${L.y}) scale(${L.s})`;
-  const g=el('g',{class:'piece',transform:t,tabindex:0,role:'button','aria-label':'Sélectionner '+p.name,'data-k':k},pg);
-  el('use',{href:'#art-'+k},g);
-  el('path',{class:'cut',d:p.d},g);
-  el('path',{class:'seam',d:p.d,transform:`translate(${p.w*.035} ${p.h*.03}) scale(.93 .94)`},g);
-  // Droit-fil
-  const gx=p.w*.5, y1=p.h*.42, y2=p.h*.82;
-  el('path',{class:'grain',d:`M${gx} ${y1} L${gx} ${y2} M${gx-8} ${y1+14} L${gx} ${y1} L${gx+8} ${y1+14} M${gx-8} ${y2-14} L${gx} ${y2} L${gx+8} ${y2-14}`},g);
-  pieceEls[k]=g;
-  const lx=L.x+p.w*L.s/2, ly=L.y+p.h*L.s+24;
-  el('text',{class:'plabel',x:lx,y:ly,'text-anchor':'middle'},pg).textContent=p.name.toUpperCase();
-  el('text',{class:'pnote',x:lx,y:ly+18,'text-anchor':'middle'},pg).textContent=p.note+' · droit-fil ↕';
-});
-// Pli marks on body pieces (centre)
-['devant','dos'].forEach(k=>{
-  const L=LAYOUT[k], p=PIECES[k], cx=L.x+p.w*L.s/2;
-  el('path',{d:`M${cx} ${L.y+6} L${cx} ${L.y+p.h*L.s-6}`,stroke:'var(--ink-2)','stroke-width':1,'stroke-dasharray':'2 6',fill:'none','pointer-events':'none'},pg);
-});
-
-// Preview garments
-const pv=document.getElementById('previewGarments');
-function garment(kind,x){
-  const body=kind==='front'?'devant':'dos';
-  // Vu de dos, la manche gauche passe à droite.
-  const leftS=kind==='front'?'mancheD':'mancheG', rightS=kind==='front'?'mancheG':'mancheD';
-  const g=el('g',{transform:`translate(${x} 80) scale(.72)`,'data-view':kind},pv);
-  // Manche portée : la ligne du haut prolonge l'épaule, le motif de la pièce est projeté dessus.
-  const SH={L:{d:'M80 40 L-92 118 L-46 236 L4 206 Q58 150 80 40 Z',cuff:'M-79 123 L-35 223',tx:-13,a:61},
-            R:{d:'M420 40 L592 118 L546 236 L496 206 Q442 150 420 40 Z',cuff:'M579 123 L535 223',tx:513,a:-61}};
-  const sleeve=(k,side)=>{
-    const c=SH[side], id='sl-'+kind+'-'+side;
-    const cp=el('clipPath',{id},defs); el('path',{d:c.d},cp);
-    const cg=el('g',{'clip-path':`url(#${id})`},g);
-    el('rect',{class:'pfab',x:-200,y:-100,width:900,height:500,fill:state.fabric},cg);
-    el('use',{href:'#art-'+k,transform:`translate(${c.tx} 150) rotate(${c.a}) scale(1.2) translate(-150 -125)`},cg);
-    el('path',{d:c.d,fill:'url(#shadeSleeve)'},g);
-    el('path',{d:c.d,fill:'none',stroke:'#000','stroke-opacity':.16,'stroke-width':2},g);
-    el('path',{d:c.cuff,stroke:'#000','stroke-opacity':.16,'stroke-width':2,'stroke-dasharray':'6 5'},g);
-  };
-  sleeve(leftS,'L'); sleeve(rightS,'R');
-  el('use',{href:'#art-'+body},g); el('use',{href:'#shade-'+body},g);
-  el('path',{d:PIECES[body].d,fill:'none',stroke:'#000','stroke-opacity':.18,'stroke-width':2},g);
-  el('path',{d:'M6 676 L494 676',stroke:'#000','stroke-opacity':.14,'stroke-width':2,'stroke-dasharray':'6 5'},g);
-  el('path',{class:'collar',d:PIECES[body].neck,fill:'none',stroke:shade(state.fabric,-0.12),'stroke-width':16,'stroke-linecap':'round'},g);
-  el('path',{d:PIECES[body].neck,fill:'none',stroke:'#000','stroke-opacity':.12,'stroke-width':2,transform:'translate(0 8)'},g);
-  const t=el('text',{x:250,y:750,'text-anchor':'middle',class:'plabel','font-size':40},g); t.textContent=kind==='front'?'DEVANT':'DOS';
-  return g;
+const views={}, zoneEls={}; ZORDER.forEach(z=>zoneEls[z]={rects:[],imgs:[],parts:[]});
+const defs=document.getElementById('defs'), vg=document.getElementById('views');
+let uid=0;
+function buildView(view){
+  const g=el('g',{'data-view':view},vg);
+  const silId='sil-'+view, sil=el('clipPath',{id:silId},defs);
+  if(view==='front') el('path',{d:INNER_F,fill:'#000',opacity:1},g).classList.add('inner');
+  partsFor(view).forEach(([z,d,rib])=>{
+    el('path',{d},sil);
+    const id='c'+(uid++), cp=el('clipPath',{id},defs); el('path',{d},cp);
+    const pg=el('g',{class:'part','data-zone':z},g);
+    const inner=el('g',{'clip-path':`url(#${id})`},pg);
+    zoneEls[z].rects.push(el('rect',{x:-50,y:-50,width:W+100,height:H+100},inner));
+    zoneEls[z].imgs.push(el('image',{preserveAspectRatio:'none'},inner));
+    if(rib) el('rect',{x:-50,y:-50,width:W+100,height:H+100,fill:'url(#rib)',transform:'rotate(-36 70 250)'},inner);
+    el('path',{class:'outline',d,fill:'none',stroke:'#000','stroke-opacity':.16,'stroke-width':2},pg);
+    zoneEls[z].parts.push(pg);
+  });
+  const logos=el('g',{'clip-path':`url(#${silId})`,'data-logos':view},g);
+  const shade=el('g',{'clip-path':`url(#${silId})`,'pointer-events':'none'},g);
+  el('rect',{x:0,y:0,width:W,height:H,fill:'url(#shadeH)'},shade);
+  el('rect',{x:0,y:0,width:W,height:H,fill:'url(#shadeV)'},shade);
+  el('path',{d:'M166 604 L434 604',stroke:'#000','stroke-opacity':.16,'stroke-width':2,'stroke-dasharray':'7 6',fill:'none'},shade);
+  // col côtelé
+  const neck=view==='front'?NECK_F:NECK_B;
+  const colG=el('g',{class:'part','data-zone':'col'},g);
+  const ring=view==='front'?'M232 44 Q300 106 368 44 Q300 16 232 44 Z':neck;
+  const band=el('path',{d:ring,fill:'none','stroke-width':18,'stroke-linejoin':'round','stroke-linecap':'butt'},colG);
+  zoneEls.col.bands=(zoneEls.col.bands||[]).concat(band);
+  el('path',{d:ring,fill:'none',stroke:'url(#rib)','stroke-width':18,'stroke-linejoin':'round'},colG);
+  el('path',{class:'outline',d:neck,fill:'none',stroke:'#000','stroke-opacity':.12,'stroke-width':2,transform:'translate(0 11)'},colG);
+  zoneEls.col.parts.push(colG);
+  const lab=el('text',{x:W/2,y:H+40,'text-anchor':'middle',class:'vlabel'},g); lab.textContent=view==='front'?'DEVANT':'DOS';
+  views[view]={g,logos};
 }
-const gFront=garment('front',40), gBack=garment('back',590);
-function layoutView(){
-  const v=state.view;
-  if(v==='both'){ gFront.setAttribute('transform','translate(112 55) scale(.64)'); gBack.setAttribute('transform','translate(652 55) scale(.64)'); gFront.style.display=gBack.style.display=''; }
-  else { const g=v==='front'?gFront:gBack, o=v==='front'?gBack:gFront; o.style.display='none'; g.style.display=''; g.setAttribute('transform','translate(375 45) scale(.7)'); }
-  document.querySelectorAll('[data-view]').forEach(b=>{ if(b.tagName==='BUTTON') b.setAttribute('aria-pressed',b.dataset.view===v); });
+buildView('front'); buildView('back');
+
+// Patron à plat : les mêmes pièces, écartées les unes des autres (le motif garde sa place)
+function buildFlat(){
+  const fg=document.getElementById('flatPieces');
+  const P=[['devant',BODY_F,-130,12,'DEVANT','Couper 1 au pli'],['dos',BODY_B,200,12,'DOS','Couper 1 au pli'],
+    ['epaules',SLEEVE_TOP,630,-20,'ÉPAULE G','Couper 1'],['epaules',mirror(SLEEVE_TOP),565,-20,'ÉPAULE D','Couper 1'],
+    ['manches',SLEEVE_LOW,670,40,'MANCHE G','Couper 1'],['manches',mirror(SLEEVE_LOW),500,40,'MANCHE D','Couper 1'],
+    ['poignets',CUFF,700,170,'BAS DE MANCHE','Couper 2 · côtes',true],['poignets',mirror(CUFF),480,170,'',''],];
+  P.forEach(([z,d,tx,ty,lab,note,rib])=>{
+    const g=el('g',{class:'part','data-zone':z,transform:`translate(${tx} ${ty})`},fg);
+    const id='f'+(uid++), cp=el('clipPath',{id},defs); el('path',{d},cp);
+    const inner=el('g',{'clip-path':`url(#${id})`},g);
+    zoneEls[z].rects.push(el('rect',{x:-50,y:-50,width:W+100,height:H+100},inner));
+    zoneEls[z].imgs.push(el('image',{preserveAspectRatio:'none'},inner));
+    if(z==='poignets') el('rect',{x:-50,y:-50,width:W+100,height:H+100,fill:'url(#rib)',transform:'rotate(-36 70 250)'},inner);
+    el('path',{class:'outline',d,fill:'none',stroke:'var(--ink)','stroke-width':2.2},g);
+    el('path',{d,fill:'none',stroke:'var(--ink-2)','stroke-width':1.2,'stroke-dasharray':'6 5',transform:'',style:'transform-box:fill-box;transform-origin:center;transform:scale(.94)'},g);
+    zoneEls[z].parts.push(g);
+  });
+  // Col : bande côtelée droite
+  const cg=el('g',{class:'part','data-zone':'col',transform:'translate(700 520)'},fg);
+  zoneEls.col.rects.push(el('rect',{x:0,y:0,width:400,height:26,rx:4},cg));
+  el('rect',{x:0,y:0,width:400,height:26,rx:4,fill:'url(#rib)'},cg);
+  el('rect',{class:'outline',x:0,y:0,width:400,height:26,rx:4,fill:'none',stroke:'var(--ink)','stroke-width':2.2},cg);
+  zoneEls.col.parts.push(cg);
+  const L=[[170,658,'DEVANT','Couper 1 au pli'],[500,658,'DOS','Couper 1 au pli'],[800,205,'ÉPAULES','Couper 2'],[800,350,'MANCHES','Couper 2'],[800,485,'BAS DE MANCHE','Couper 2 · côtes'],[900,568,'COL','Côtes 1x1 · couper 1']];
+  L.forEach(([x,y,a,b])=>{el('text',{class:'plabel',x,y,'text-anchor':'middle'},fg).textContent=a;
+    el('text',{class:'pnote',x,y:y+15,'text-anchor':'middle'},fg).textContent=b;});
 }
-document.querySelectorAll('button[data-view]').forEach(b=>b.onclick=()=>{state.view=b.dataset.view;layoutView();});
+buildFlat();
 
-// Chips + controls
-const chips=document.getElementById('pieceChips');
-function renderChips(){ chips.innerHTML=''; ORDER.forEach(k=>{ const b=document.createElement('button'); b.type='button'; b.className='chip';
-  b.setAttribute('aria-pressed',k===state.sel); b.innerHTML=PIECES[k].name+(state.pieces[k].src?'<span class="dot" aria-label="image importée"></span>':'');
-  b.onclick=()=>select(k); chips.appendChild(b); }); }
-const scaleI=document.getElementById('scale'), rotI=document.getElementById('rot');
-function syncControls(){ const s=state.pieces[state.sel], has=!!s.src;
-  scaleI.value=Math.round(s.scale*100); rotI.value=s.rot;
-  document.getElementById('scaleOut').textContent=Math.round(s.scale*100)+' %';
-  document.getElementById('rotOut').textContent=s.rot+'°';
-  [scaleI,rotI,document.getElementById('center'),document.getElementById('remove')].forEach(x=>x.disabled=!has);
-  document.getElementById('copySleeve').disabled=!(has&&state.sel.startsWith('manche'));
-  ORDER.forEach(k=>pieceEls[k].classList.toggle('sel',k===state.sel)); renderChips(); }
-function select(k){ state.sel=k; syncControls(); }
-scaleI.oninput=()=>{ state.pieces[state.sel].scale=scaleI.value/100; renderImg(state.sel); syncControls(); };
-rotI.oninput=()=>{ state.pieces[state.sel].rot=+rotI.value; renderImg(state.sel); syncControls(); };
-document.getElementById('center').onclick=()=>{ const s=state.pieces[state.sel]; s.ox=0;s.oy=0;s.rot=0;s.scale=1; renderImg(state.sel); syncControls(); };
-document.getElementById('remove').onclick=()=>{ state.pieces[state.sel].src=null; renderImg(state.sel); syncControls(); };
-document.getElementById('copySleeve').onclick=()=>{ const o=state.sel==='mancheG'?'mancheD':'mancheG'; state.pieces[o]={...state.pieces[state.sel]}; renderImg(o); syncControls(); };
+function shade(hex,amt){const n=parseInt(hex.slice(1),16);let r=n>>16,g=n>>8&255,b=n&255;
+  const f=v=>Math.max(0,Math.min(255,Math.round(v+(amt<0?v*amt:(255-v)*amt))));return '#'+[f(r),f(g),f(b)].map(v=>v.toString(16).padStart(2,'0')).join('');}
+function renderZone(z){
+  const s=state.zones[z], E=zoneEls[z];
+  E.rects.forEach(r=>r.setAttribute('fill',s.color));
+  (E.bands||[]).forEach(b=>b.setAttribute('stroke',s.color));
+  (E.backs||[]).forEach(b=>b.setAttribute('stroke',shade(s.color,-0.25)));
+  E.imgs.forEach(im=>{
+    if(!s.img){im.removeAttribute('href');im.setAttribute('width',0);im.setAttribute('height',0);return;}
+    const i=s.img, cover=Math.max(W/i.iw,H/i.ih), dw=i.iw*cover*i.scale, dh=i.ih*cover*i.scale, cx=W/2+i.ox, cy=H/2+i.oy;
+    im.setAttribute('href',i.src); im.setAttribute('x',cx-dw/2); im.setAttribute('y',cy-dh/2);
+    im.setAttribute('width',dw); im.setAttribute('height',dh); im.setAttribute('transform',`rotate(${i.rot} ${cx} ${cy})`);
+  });
+  if(z==='devant') document.querySelector('.inner')?.setAttribute('fill',shade(s.color,-0.3));
+}
+function layoutViews(){
+  const v=state.view, F=views.front.g, B=views.back.g;
+  if(v==='both'){F.style.display=B.style.display='';F.setAttribute('transform','translate(10 10)');B.setAttribute('transform','translate(630 10)');}
+  else{const s=v==='front'?F:B,o=v==='front'?B:F;o.style.display='none';s.style.display='';s.setAttribute('transform','translate(320 4) scale(.98)');}
+  document.querySelectorAll('[data-view]').forEach(b=>{if(b.tagName==='BUTTON')b.setAttribute('aria-pressed',b.dataset.view===v);});
+}
+document.querySelectorAll('button[data-view]').forEach(b=>b.onclick=()=>{state.view=b.dataset.view;layoutViews();});
 
-function loadFile(file,k){ if(!file||!file.type.startsWith('image/')) return;
-  const r=new FileReader(); r.onload=()=>setImage(k,r.result); r.readAsDataURL(file); }
-function setImage(k,src){ const im=new Image(); im.onload=()=>{ state.pieces[k]={src,iw:im.naturalWidth||1,ih:im.naturalHeight||1,scale:1,ox:0,oy:0,rot:0};
-  renderImg(k); select(k); document.getElementById('exBadge').hidden=true; }; im.src=src; }
-document.getElementById('file').onchange=e=>{ loadFile(e.target.files[0],state.sel); e.target.value=''; };
-document.addEventListener('paste',e=>{ const it=[...(e.clipboardData?.items||[])].find(i=>i.type.startsWith('image/')); if(it){ e.preventDefault(); loadFile(it.getAsFile(),state.sel);} });
+// Logos
+function renderLogos(){
+  ['front','back'].forEach(v=>{const L=views[v].logos;L.innerHTML='';
+    state.logos.filter(l=>l.view===v).forEach(l=>{
+      const h=l.w*l.ih/l.iw, g=el('g',{class:'logo'+(l.id===state.logoSel?' sel':''),transform:`rotate(${l.rot} ${l.x} ${l.y})`,'data-id':l.id},L);
+      el('image',{href:l.src,x:l.x-l.w/2,y:l.y-h/2,width:l.w,height:h,preserveAspectRatio:'none'},g);
+      el('rect',{class:'box',x:l.x-l.w/2-6,y:l.y-h/2-6,width:l.w+12,height:h+12,fill:'transparent'},g);
+    });});
+  const lc=document.getElementById('logoChips'); lc.innerHTML='';
+  if(!state.logos.length){lc.innerHTML='<span class="empty">Aucun logo pour l\'instant.</span>';}
+  state.logos.forEach((l,i)=>{const b=document.createElement('button');b.type='button';b.className='chip';b.setAttribute('aria-pressed',l.id===state.logoSel);
+    b.textContent=`Logo ${i+1} · ${l.view==='front'?'devant':'dos'}`;b.onclick=()=>selectLogo(l.id);lc.appendChild(b);});
+  const l=state.logos.find(x=>x.id===state.logoSel);
+  ['lSize','lRot','logoRemove'].forEach(id=>document.getElementById(id).disabled=!l);
+  if(l){lSize.value=l.w;lRot.value=l.rot;document.getElementById('lSizeOut').textContent=Math.round(l.w/6)+' cm';document.getElementById('lRotOut').textContent=l.rot+'°';
+    state.face=l.view; syncFace();}
+  else{document.getElementById('lSizeOut').textContent='—';document.getElementById('lRotOut').textContent='—';}
+  syncFace();
+}
+function selectLogo(id){state.logoSel=id;renderLogos();}
+function syncFace(){document.querySelectorAll('[data-face]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.face===state.face));}
+document.querySelectorAll('[data-face]').forEach(b=>b.onclick=()=>{state.face=b.dataset.face;const l=state.logos.find(x=>x.id===state.logoSel);if(l){l.view=state.face;renderLogos();}syncFace();});
+const lSize=document.getElementById('lSize'), lRot=document.getElementById('lRot');
+lSize.oninput=()=>{const l=state.logos.find(x=>x.id===state.logoSel);if(l){l.w=+lSize.value;renderLogos();}};
+lRot.oninput=()=>{const l=state.logos.find(x=>x.id===state.logoSel);if(l){l.rot=+lRot.value;renderLogos();}};
+document.getElementById('logoRemove').onclick=()=>{state.logos=state.logos.filter(x=>x.id!==state.logoSel);state.logoSel=null;renderLogos();};
+let lid=0;
+function addLogo(src,opts={}){const im=new Image();im.onload=()=>{const l=Object.assign({id:++lid,src,iw:im.naturalWidth||1,ih:im.naturalHeight||1,view:state.face,
+  x:state.face==='front'?375:300,y:state.face==='front'?200:230,w:state.face==='front'?120:240,rot:0},opts);state.logos.push(l);state.logoSel=l.id;renderLogos();};im.src=src;}
+function readFile(file,cb){if(!file||!file.type.startsWith('image/'))return;const r=new FileReader();r.onload=()=>cb(r.result);r.readAsDataURL(file);}
+document.getElementById('logoFile').onchange=e=>{readFile(e.target.files[0],src=>{addLogo(src);hideEx();});e.target.value='';};
 
-// Pattern interactions: select, drag image, drop file
+// Zones
+const zc=document.getElementById('zoneChips');
+function renderChips(){zc.innerHTML='';ZORDER.forEach(z=>{const b=document.createElement('button');b.type='button';b.className='chip';
+  b.setAttribute('aria-pressed',z===state.zone&&!state.logoSel);b.innerHTML=`<span class="sq" style="background:${state.zones[z].color}"></span>${ZONES[z].name}`;
+  b.onclick=()=>selectZone(z);zc.appendChild(b);});
+  document.getElementById('zoneName').textContent=ZONES[state.zone].name;}
+function selectZone(z){state.zone=z;state.logoSel=null;renderLogos();syncZone();}
+const zScale=document.getElementById('zScale'), zRot=document.getElementById('zRot');
+function syncZone(){
+  ZORDER.forEach(z=>zoneEls[z].parts.forEach(p=>p.classList.toggle('sel',z===state.zone&&!state.logoSel)));
+  const s=state.zones[state.zone], has=!!s.img;
+  [zScale,zRot,document.getElementById('zoneRemove'),document.getElementById('applyAll')].forEach(x=>x.disabled=!has);
+  zScale.value=has?Math.round(s.img.scale*100):100; zRot.value=has?s.img.rot:0;
+  document.getElementById('zScaleOut').textContent=(has?Math.round(s.img.scale*100):100)+' %';
+  document.getElementById('zRotOut').textContent=(has?s.img.rot:0)+'°';
+  document.getElementById('zoneFile').disabled=state.zone==='col';
+  document.querySelectorAll('.sw').forEach(b=>b.setAttribute('aria-pressed',b.dataset.c.toLowerCase()===s.color.toLowerCase()));
+  document.getElementById('custom').value=s.color;
+  renderChips();
+}
+zScale.oninput=()=>{const s=state.zones[state.zone];if(s.img){s.img.scale=zScale.value/100;renderZone(state.zone);syncZone();}};
+zRot.oninput=()=>{const s=state.zones[state.zone];if(s.img){s.img.rot=+zRot.value;renderZone(state.zone);syncZone();}};
+document.getElementById('zoneRemove').onclick=()=>{state.zones[state.zone].img=null;renderZone(state.zone);syncZone();};
+document.getElementById('applyAll').onclick=()=>{const src=state.zones[state.zone].img;['devant','dos','epaules','manches','poignets'].forEach(z=>{state.zones[z].img={...src};renderZone(z);});syncZone();};
+function setZoneImg(z,src,extra={}){const im=new Image();im.onload=()=>{state.zones[z].img=Object.assign({src,iw:im.naturalWidth||1,ih:im.naturalHeight||1,scale:1,ox:0,oy:0,rot:0},extra);renderZone(z);syncZone();};im.src=src;}
+document.getElementById('zoneFile').onchange=e=>{readFile(e.target.files[0],src=>{setZoneImg(state.zone,src);hideEx();});e.target.value='';};
+document.addEventListener('paste',e=>{const it=[...(e.clipboardData?.items||[])].find(i=>i.type.startsWith('image/'));if(!it)return;e.preventDefault();
+  readFile(it.getAsFile(),src=>{state.logoSel?addLogo(src):setZoneImg(state.zone,src);hideEx();});});
+
+const COLORS=[['Blanc','#FFFFFF'],['Rose','#F6A9C4'],['Lilas','#A98BD6'],['Marine','#1F2A55'],['Noir','#1E1F22'],['Rouge','#D7263D'],['Jaune','#FFD23F'],['Vert d\'eau','#A9DCCB'],['Gris chiné','#C9CBCF']];
+const sw=document.getElementById('swatches');
+COLORS.forEach(([n,c])=>{const b=document.createElement('button');b.type='button';b.className='sw';b.style.background=c;b.dataset.c=c;b.title=n;b.setAttribute('aria-label','Couleur '+n);
+  b.onclick=()=>{state.zones[state.zone].color=c;renderZone(state.zone);syncZone();};sw.appendChild(b);});
+const ci=document.createElement('input');ci.type='color';ci.id='custom';ci.setAttribute('aria-label','Autre couleur');
+ci.oninput=()=>{state.zones[state.zone].color=ci.value;renderZone(state.zone);syncZone();};sw.appendChild(ci);
+
+// Interactions sur l'aperçu : sélection, déplacement des motifs et des logos
+const stage=document.getElementById('stage'), flat=document.getElementById('flat');
 let drag=null;
-ORDER.forEach(k=>{ const g=pieceEls[k];
-  g.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); select(k);} });
-  g.addEventListener('pointerdown',e=>{ select(k); const s=state.pieces[k]; if(!s.src) return;
-    const m=g.getScreenCTM(); drag={k,x:e.clientX,y:e.clientY,ox:s.ox,oy:s.oy,inv:m.inverse()}; g.setPointerCapture(e.pointerId); });
-  g.addEventListener('pointermove',e=>{ if(!drag||drag.k!==k) return; const i=drag.inv;
-    const dx=(e.clientX-drag.x), dy=(e.clientY-drag.y);
-    const s=state.pieces[k]; s.ox=drag.ox+i.a*dx+i.c*dy; s.oy=drag.oy+i.b*dx+i.d*dy; renderImg(k); });
-  g.addEventListener('pointerup',()=>drag=null); g.addEventListener('pointercancel',()=>drag=null);
-  g.addEventListener('dragover',e=>{ e.preventDefault(); g.classList.add('drop'); });
-  g.addEventListener('dragleave',()=>g.classList.remove('drop'));
-  g.addEventListener('drop',e=>{ e.preventDefault(); g.classList.remove('drop'); loadFile(e.dataTransfer.files[0],k); });
+function ptIn(node,e){const m=node.getScreenCTM().inverse();return{x:m.a*e.clientX+m.c*e.clientY+m.e,y:m.b*e.clientX+m.d*e.clientY+m.f};}
+[stage,flat].forEach(svg=>{
+svg.addEventListener('pointerdown',e=>{
+  const lg=e.target.closest('.logo'), part=e.target.closest('.part');
+  if(lg){const node=lg.parentNode,p=ptIn(node,e),l=state.logos.find(x=>x.id==lg.dataset.id);selectLogo(l.id);drag={type:'logo',l,node,sx:p.x,sy:p.y,ox:l.x,oy:l.y};}
+  else if(part){const z=part.dataset.zone,p=ptIn(part,e);selectZone(z);const s=state.zones[z];if(s.img)drag={type:'zone',z,node:part,sx:p.x,sy:p.y,ox:s.img.ox,oy:s.img.oy};}
+  else return;
+  svg.setPointerCapture(e.pointerId); e.preventDefault();
 });
-document.addEventListener('dragover',e=>e.preventDefault()); document.addEventListener('drop',e=>e.preventDefault());
+svg.addEventListener('pointermove',e=>{if(!drag)return;const p=ptIn(drag.node,e),dx=p.x-drag.sx,dy=p.y-drag.sy;
+  if(drag.type==='logo'){drag.l.x=drag.ox+dx;drag.l.y=drag.oy+dy;renderLogos();}
+  else{const i=state.zones[drag.z].img;i.ox=drag.ox+dx;i.oy=drag.oy+dy;renderZone(drag.z);}});
+['pointerup','pointercancel'].forEach(t=>svg.addEventListener(t,()=>drag=null));
+svg.addEventListener('dragover',e=>e.preventDefault());
+svg.addEventListener('drop',e=>{e.preventDefault();const f=e.dataTransfer.files[0];const part=e.target.closest('.part');
+  if(part)selectZone(part.dataset.zone);readFile(f,src=>{setZoneImg(state.zone,src);hideEx();});});
+});
+function hideEx(){document.getElementById('exBadge').hidden=true;}
 
-// Fabric swatches
-const FAB=[['Blanc','#FFFFFF'],['Gris chiné','#C9CBCF'],['Noir','#1E1F22'],['Marine','#1F2A44'],['Rose','#F4B8C8'],['Vert d\'eau','#A9DCCB']];
-const fab=document.getElementById('fabric');
-function renderFab(){ fab.querySelectorAll('.sw').forEach(b=>b.setAttribute('aria-pressed',b.dataset.c.toLowerCase()===state.fabric.toLowerCase())); }
-FAB.forEach(([n,c])=>{ const b=document.createElement('button'); b.type='button'; b.className='sw'; b.style.background=c; b.dataset.c=c; b.title=n; b.setAttribute('aria-label','Tissu '+n);
-  b.onclick=()=>{ state.fabric=c; document.getElementById('fabCustom').value=c; renderFabric(); renderFab(); }; fab.appendChild(b); });
-const ci=document.createElement('input'); ci.type='color'; ci.id='fabCustom'; ci.value='#ffffff'; ci.setAttribute('aria-label','Autre couleur de tissu');
-ci.oninput=()=>{ state.fabric=ci.value; renderFabric(); renderFab(); }; fab.appendChild(ci);
+// Visuels d'exemple dessinés en canvas
+function canvas(w,h,draw){const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);return c.toDataURL('image/png');}
+const exWaves=canvas(900,960,(x,w,h)=>{x.fillStyle='#F6A9C4';x.fillRect(0,0,w,h);
+  for(let k=0;k<26;k++){x.strokeStyle=k%2?'rgba(255,255,255,.35)':'rgba(214,80,140,.22)';x.lineWidth=18;x.beginPath();
+    for(let X=-20;X<=w+20;X+=10){const Y=k*42+Math.sin(X/70+k)*22+Math.sin(X/23)*5;X===-20?x.moveTo(X,Y):x.lineTo(X,Y);}x.stroke();}
+  x.strokeStyle='rgba(255,255,255,.75)';x.lineWidth=2.5;
+  for(let f=0;f<5;f++){const cx=150+f*170,cy=200+(f%2)*420;for(let p=0;p<6;p++){x.beginPath();x.ellipse(cx,cy,110,34,p*Math.PI/6+f,0,Math.PI*2);x.stroke();}}});
+const exLilac=canvas(900,960,(x,w,h)=>{x.fillStyle='#A98BD6';x.fillRect(0,0,w,h);x.strokeStyle='rgba(255,255,255,.6)';x.lineWidth=2.5;
+  for(let f=0;f<7;f++){const cx=80+f*130,cy=120+(f%3)*140;for(let p=0;p<6;p++){x.beginPath();x.ellipse(cx,cy,90,26,p*Math.PI/6+f,0,Math.PI*2);x.stroke();}}});
+const exLogo=canvas(520,300,(x,w,h)=>{x.clearRect(0,0,w,h);x.fillStyle='#14141A';x.font='italic 170px "Instrument Serif", serif';x.textAlign='center';x.fillText('chloé',w/2,h*.6);
+  x.font='600 34px "JetBrains Mono", monospace';x.fillText('— DESIGN —',w/2,h*.88);x.fillStyle='#E5336D';x.beginPath();x.arc(w*.82,h*.18,16,0,Math.PI*2);x.fill();});
+const exBack=canvas(600,300,(x,w,h)=>{x.clearRect(0,0,w,h);x.fillStyle='#1F2A55';x.font='800 120px "Bricolage Grotesque", sans-serif';x.textAlign='center';x.fillText('CHLOÉ',w/2,h*.5);
+  x.font='800 150px "Bricolage Grotesque", sans-serif';x.fillText('10',w/2,h*.98);});
 
-// Example visuals drawn in canvas so the tool opens filled
-function sample(w,h,draw){ const c=document.createElement('canvas'); c.width=w; c.height=h; const x=c.getContext('2d'); draw(x,w,h); return c.toDataURL('image/png'); }
-const exFront=sample(800,800,(x,w,h)=>{ x.clearRect(0,0,w,h);
-  const cols=['#E5336D','#FF8A3D','#FFD23F','#3DBFA4','#6A4FD8'];
-  cols.forEach((c,i)=>{ x.fillStyle=c; x.beginPath(); x.arc(w/2,h*.55,260-i*44,Math.PI,0); x.fill(); });
-  x.fillStyle='#1B2230'; x.font='800 120px "Bricolage Grotesque", sans-serif'; x.textAlign='center'; x.fillText('ATELIER',w/2,h*.75);
-  x.font='italic 64px "Instrument Serif", serif'; x.fillText('La Réunion',w/2,h*.85); });
-const exBack=sample(800,600,(x,w,h)=>{ x.clearRect(0,0,w,h); x.fillStyle='#1B2230'; x.font='800 170px "Bricolage Grotesque", sans-serif'; x.textAlign='center';
-  x.fillText('974',w/2,h*.55); x.fillStyle='#E5336D'; x.font='600 44px "JetBrains Mono", monospace'; x.fillText('ÉDITION LIMITÉE',w/2,h*.72); });
-const exSleeve=sample(600,440,(x,w,h)=>{ for(let i=0;i<12;i++){ x.fillStyle=i%2?'#FFFFFF':'#E5336D'; x.fillRect(0,i*h/12,w,h/12);} });
-function initExamples(){ let n=0; const done=()=>{ if(++n===4){ select('devant'); document.getElementById('exBadge').hidden=false; } };
-  [['devant',exFront,.62,0,-40],['dos',exBack,.7,0,-80],['mancheG',exSleeve,1,0,0],['mancheD',exSleeve,1,0,0]].forEach(([k,src,sc,ox,oy])=>{
-    const im=new Image(); im.onload=()=>{ state.pieces[k]={src,iw:im.naturalWidth,ih:im.naturalHeight,scale:sc,ox,oy,rot:0}; renderImg(k); done(); }; im.src=src; }); }
-
-renderFabric(); renderFab(); layoutView(); syncControls();
-(document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(initExamples);
+ZORDER.forEach(renderZone); layoutViews(); renderLogos(); syncZone();
+(document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(()=>{
+  ['devant','dos','manches'].forEach(z=>setZoneImg(z,exWaves));
+  setZoneImg('epaules',exLilac);
+  state.face='front'; addLogo(exLogo,{view:'front',x:378,y:205,w:120});
+  setTimeout(()=>{addLogo(exBack,{view:'back',x:300,y:250,w:230});setTimeout(()=>{state.logoSel=null;state.face='front';selectZone('devant');},60);},60);
+});
 </script>
 
 </body>
