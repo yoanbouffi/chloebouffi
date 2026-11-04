@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chloé Bouffi — Infographiste</title>
+<meta name="description" content="Chloé Bouffi, infographiste et web designer à La Réunion : identité visuelle, print, web, marquage textile, gabarits, BAT et préparation de fichiers de production.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F3EFE7; --paper-2:#E9E3D7; --ink:#161513; --ink-2:#55514A; --line:#D3CBBC;
+  --c:#00A3E0; --m:#E4007C; --y:#FFD400; --k:#161513;
+  --radius:14px; --max:1180px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:"Bricolage Grotesque",system-ui,sans-serif;font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 16px}
+@media(min-width:760px){.wrap{padding:0 32px}}
+em,.serif{font-family:"Instrument Serif",serif;font-style:italic;font-weight:400}
+
+/* Header */
+header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
+.mono{font-weight:800;letter-spacing:-.02em;text-decoration:none;display:flex;align-items:center;gap:10px}
+.cmyk{display:inline-flex;gap:3px}
+.cmyk i{width:9px;height:9px;border-radius:50%;display:block}
+.cmyk i:nth-child(1){background:var(--c)}.cmyk i:nth-child(2){background:var(--m)}.cmyk i:nth-child(3){background:var(--y)}.cmyk i:nth-child(4){background:var(--k)}
+nav{display:none;gap:26px;font-size:15px}
+nav a{text-decoration:none;color:var(--ink-2)} nav a:hover{color:var(--ink)}
+@media(min-width:760px){nav{display:flex}}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:999px;border:1.5px solid var(--ink);text-decoration:none;font-weight:600;font-size:15px;transition:.2s}
+.btn.solid{background:var(--ink);color:var(--paper)}
+.btn:hover{transform:translateY(-2px)}
+
+/* Hero with crop marks */
+.hero{padding:56px 0 64px}
+.sheet{position:relative;padding:44px 22px;border:1px dashed var(--line)}
+@media(min-width:760px){.sheet{padding:80px 64px}}
+.crop{position:absolute;width:26px;height:26px}
+.crop::before,.crop::after{content:"";position:absolute;background:var(--ink)}
+.crop::before{width:26px;height:1px}.crop::after{width:1px;height:26px}
+.tl{top:-14px;left:-14px}.tl::before{top:13px}.tl::after{left:13px}
+.tr{top:-14px;right:-14px}.tr::before{top:13px}.tr::after{right:13px}
+.bl{bottom:-14px;left:-14px}.bl::before{bottom:13px}.bl::after{left:13px}
+.br{bottom:-14px;right:-14px}.br::before{bottom:13px}.br::after{right:13px}
+.eyebrow{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);display:flex;align-items:center;gap:10px}
+h1{font-size:clamp(52px,13vw,148px);line-height:.9;letter-spacing:-.045em;font-weight:800;margin:18px 0 22px}
+h1 em{font-weight:400;letter-spacing:-.02em}
+.lead{font-size:clamp(19px,2.4vw,24px);max-width:640px;color:var(--ink-2)}
+.lead b{color:var(--ink);font-weight:600}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.swatches{position:absolute;right:22px;bottom:22px;display:none;gap:0}
+.swatches span{width:34px;height:34px;display:block}
+@media(min-width:760px){.swatches{display:flex}}
+
+/* Sections */
+section{padding:72px 0;border-top:1px solid var(--line)}
+.sec-head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:16px;margin-bottom:34px}
+h2{font-size:clamp(36px,6vw,64px);line-height:1;letter-spacing:-.035em;font-weight:800}
+.num{font-family:"Instrument Serif",serif;font-style:italic;color:var(--m);font-size:22px;display:block;margin-bottom:8px}
+
+/* Filters + grid */
+.filters{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:transparent;padding:8px 15px;border-radius:999px;font:inherit;font-size:14px;cursor:pointer;color:var(--ink-2)}
+.chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:1fr;gap:22px}
+@media(min-width:640px){.grid{grid-template-columns:1fr 1fr}}
+@media(min-width:980px){.grid{grid-template-columns:repeat(3,1fr)}}
+.card{cursor:pointer;text-align:left;background:none;border:0;font:inherit;color:inherit}
+.thumb{aspect-ratio:4/3;border-radius:var(--radius);overflow:hidden;background:var(--paper-2);position:relative}
+.thumb img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.thumb.contain img{object-fit:contain;padding:10px}
+.card:hover .thumb img,.card:hover .ph{transform:scale(1.04)}
+.ph{position:absolute;inset:0;display:grid;place-items:center;transition:transform .5s}
+.ph span{font-family:"Instrument Serif",serif;font-style:italic;font-size:26px;color:var(--ink);background:var(--paper);padding:6px 16px;border-radius:999px}
+.meta{display:flex;justify-content:space-between;gap:10px;margin-top:12px;font-size:14px;color:var(--ink-2)}
+.card h3{font-size:20px;letter-spacing:-.01em;margin-top:2px}
+
+/* Process */
+.steps{display:grid;gap:14px;grid-template-columns:1fr}
+@media(min-width:760px){.steps{grid-template-columns:repeat(3,1fr)}}
+.step{border:1px solid var(--line);border-radius:var(--radius);padding:22px;background:var(--paper)}
+.step b{display:block;font-size:19px;margin:6px 0 6px}
+.step p{color:var(--ink-2);font-size:15.5px}
+.step .k{font-family:"Instrument Serif",serif;font-style:italic;font-size:30px;line-height:1}
+.step:nth-child(6n+1) .k{color:var(--c)}.step:nth-child(6n+2) .k{color:var(--m)}.step:nth-child(6n+3) .k{color:#C9A500}
+.step:nth-child(6n+4) .k{color:var(--ink)}.step:nth-child(6n+5) .k{color:var(--c)}.step:nth-child(6n+6) .k{color:var(--m)}
+
+/* Print-ready */
+.dark{background:var(--ink);color:var(--paper);border-top:0}
+.dark .num{color:var(--y)}
+.checks{display:grid;gap:0;grid-template-columns:1fr;margin-top:10px}
+@media(min-width:760px){.checks{grid-template-columns:1fr 1fr;column-gap:48px}}
+.checks li{list-style:none;display:flex;gap:14px;padding:16px 0;border-bottom:1px solid #3a3833;font-size:17px}
+.checks li::before{content:"";flex:0 0 18px;height:18px;margin-top:4px;border:1.5px solid var(--y);border-radius:4px;background:linear-gradient(135deg,transparent 45%,var(--y) 45%,var(--y) 55%,transparent 55%)}
+.checks small{display:block;color:#A8A196;font-size:14.5px}
+
+/* Skills */
+.skills{display:grid;gap:28px;grid-template-columns:1fr}
+@media(min-width:760px){.skills{grid-template-columns:repeat(3,1fr)}}
+.skills h3{font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);margin-bottom:12px;font-weight:600}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tags span{border:1px solid var(--ink);border-radius:999px;padding:6px 14px;font-size:15px}
+
+/* Contact */
+.contact h2{font-size:clamp(40px,9vw,104px)}
+.contact a.mail{display:inline-block;margin-top:22px;font-size:clamp(22px,4vw,40px);font-weight:600;text-decoration:none;border-bottom:2px solid var(--m);word-break:break-all}
+.links{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+footer{padding:28px 0;border-top:1px solid var(--line);font-size:14px;color:var(--ink-2)}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+/* Lightbox */
+dialog{border:0;padding:0;border-radius:18px;max-width:min(980px,94vw);width:100%;background:var(--paper);color:var(--ink)}
+dialog::backdrop{background:rgba(22,21,19,.75)}
+.lb{display:grid;grid-template-columns:1fr}
+@media(min-width:860px){.lb{grid-template-columns:1.5fr 1fr}}
+.lb-media{background:var(--paper-2);min-height:260px;position:relative;display:flex;flex-direction:column;gap:2px}
+.lb-media img{width:100%;height:auto}
+.lb-media .ph{position:relative;min-height:320px}
+.lb-body{padding:26px}
+.lb-body h3{font-size:28px;letter-spacing:-.02em;line-height:1.1;margin:6px 0 12px}
+.lb-body dl{margin-top:18px;display:grid;gap:12px;font-size:15px}
+.lb-body dt{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+.close{position:absolute;top:12px;right:12px;z-index:2;width:40px;height:40px;border-radius:50%;border:0;background:var(--ink);color:var(--paper);font-size:20px;cursor:pointer}
+.reveal{opacity:0;transform:translateY(16px);transition:.7s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a href="#top" class="mono"><span class="cmyk"><i></i><i></i><i></i><i></i></span>Chloé Bouffi</a>
+    <nav>
+      <a href="#projets">Projets</a><a href="#demarche">Démarche</a><a href="#competences">Compétences</a><a href="#contact">Contact</a>
+    </nav>
+    <a href="#contact" class="btn" style="padding:8px 16px">Me contacter</a>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <div class="sheet reveal">
+      <span class="crop tl"></span><span class="crop tr"></span><span class="crop bl"></span><span class="crop br"></span>
+      <p class="eyebrow"><span class="cmyk"><i></i><i></i><i></i><i></i></span>Infographiste / Web designer · La Réunion</p>
+      <h1>Chloé<br><em>Bouffi</em></h1>
+      <p class="lead">De l'idée au <b>rendu final</b> : je conçois des logos et des visuels, je prépare les <b>gabarits</b> et les fichiers de marquage, puis je <b>contrôle</b> les essais sur textile et sur support jusqu'à la production.</p>
+      <div class="hero-cta">
+        <a href="#projets" class="btn solid">Voir les projets ↓</a>
+        <a href="portfolio-chloe-bouffi.pdf" class="btn" target="_blank" rel="noopener">Portfolio PDF</a>
+      </div>
+      <div class="swatches" aria-hidden="true"><span style="background:var(--c)"></span><span style="background:var(--m)"></span><span style="background:var(--y)"></span><span style="background:var(--k)"></span></div>
+    </div>
+  </div>
+
+  <section id="projets">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><span class="num">01</span><h2>Projets</h2></div>
+        <div class="filters" id="filters"></div>
+      </div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+
+  <section id="demarche">
+    <div class="wrap">
+      <div class="sec-head"><div><span class="num">02</span><h2>Ma <em>démarche</em></h2></div></div>
+      <div class="steps">
+        <div class="step reveal"><span class="k">i.</span><b>Comprendre le besoin</b><p>Écouter le client, lire le cahier des charges, cerner l'identité existante, la cible et les contraintes techniques.</p></div>
+        <div class="step reveal"><span class="k">ii.</span><b>Proposer des concepts</b><p>Recherches, pistes créatives et premières maquettes pour choisir une direction ensemble.</p></div>
+        <div class="step reveal"><span class="k">iii.</span><b>Maquetter et décliner</b><p>Composition, typographie, couleurs, puis déclinaison sur tous les formats : print, web, réseaux, événementiel.</p></div>
+        <div class="step reveal"><span class="k">iv.</span><b>Prototyper</b><p>Gabarit de placement par taille, BAT, puis essai sur le vrai textile ou le vrai support pour valider le rendu avant la série.</p></div>
+        <div class="step reveal"><span class="k">v.</span><b>Contrôler et corriger</b><p>Comparer l'essai au BAT : position, dimensions, teintes, tenue sur la matière. Repérer les écarts et ajuster le fichier.</p></div>
+        <div class="step reveal"><span class="k">vi.</span><b>Livrer prêt à produire</b><p>Fichiers propres et conformes, et suivi jusqu'à la réalisation finale.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dark">
+    <div class="wrap">
+      <div class="sec-head"><div><span class="num">03</span><h2>Du fichier <em>au textile</em></h2></div></div>
+      <ul class="checks">
+        <li><div>Technique adaptée au support<small>Sérigraphie, DTF, flex, broderie, sublimation : le fichier est préparé selon la technique</small></div></li><li><div>Gabarits de placement<small>Taille et position du marquage définies par taille de vêtement (cœur, dos, manche)</small></div></li><li><div>Couleurs maîtrisées<small>Références Pantone, séparation des couleurs, rendu selon la couleur du textile</small></div></li>
+        <li><div>Fonds perdus et traits de coupe<small>Pour le print : flyers, affiches, cartes, adhésifs</small></div></li>
+        <li><div>Résolution vérifiée<small>Images à la bonne définition pour la taille finale</small></div></li>
+        <li><div>Fichiers vectoriels propres<small>Tracés nettoyés, polices vectorisées, épaisseurs minimales respectées</small></div></li>
+        <li><div>BAT client et essai<small>Validation du BAT, puis essai physique comparé au visuel avant la série</small></div></li>
+        <li><div>Échanges clairs avec l'atelier ou l'imprimeur<small>Spécifications, supports et finitions transmis sans ambiguïté</small></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="competences">
+    <div class="wrap">
+      <div class="sec-head"><div><span class="num">04</span><h2>Compétences</h2></div></div>
+      <div class="skills">
+        <div class="reveal"><h3>Logiciels</h3><div class="tags"><span>Illustrator</span><span>Photoshop</span><span>InDesign</span></div></div>
+        <div class="reveal"><h3>Création</h3><div class="tags"><span>Logos</span><span>PLV & roll-ups</span><span>Cartes de visite</span><span>Visuels pour t-shirts</span><span>Chartes graphiques</span><span>Affiches & flyers</span><span>Brochures & catalogues</span><span>Visuels réseaux sociaux</span></div></div>
+        <div class="reveal"><h3>Production</h3><div class="tags"><span>Gabarits</span><span>BAT</span><span>Vectorisation</span><span>Séparation des couleurs</span><span>Pantone</span><span>Contrôle qualité</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <div class="wrap">
+      <span class="num">05</span>
+      <h2>Travaillons <em>ensemble.</em></h2>
+      <a class="mail" href="mailto:chloe.bouffi@gmail.com">chloe.bouffi@gmail.com</a>
+      <div class="links">
+        <a class="btn solid" href="tel:+262693061226">0693 06 12 26</a>
+        <a class="btn" href="portfolio-chloe-bouffi.pdf" target="_blank" rel="noopener">Portfolio PDF</a>
+        <a class="btn" href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap"><span>© <span id="yr"></span> Chloé Bouffi — Infographiste / Web designer</span><span class="cmyk"><i></i><i></i><i></i><i></i></span></div></footer>
+
+<dialog id="lb">
+  <button class="close" aria-label="Fermer" onclick="lb.close()">×</button>
+  <div class="lb">
+    <div class="lb-media" id="lbMedia"></div>
+    <div class="lb-body">
+      <p class="eyebrow" id="lbCat"></p>
+      <h3 id="lbTitle"></h3>
+      <p id="lbDesc" style="color:var(--ink-2)"></p>
+      <dl>
+        <div><dt>Mon rôle</dt><dd id="lbRole"></dd></div>
+        <div><dt>Outils</dt><dd id="lbTools"></dd></div>
+        <div><dt>Livrables</dt><dd id="lbDeliv"></dd></div>
+      </dl>
+    </div>
+  </div>
+</dialog>
+
+<script>
+/* =====================================================
+   PROJETS — c'est ici qu'on remplace le contenu.
+   images : chemins vers les fichiers dans /img (la 1re = vignette).
+   Si une image manque, un visuel provisoire s'affiche.
+   ===================================================== */
+const PROJECTS = [
+  { title:"Logotypes", cat:"Identité", year:"",
+    desc:"Sélection de logos créés pour des marques, des indépendants et des commerces : restauration, formation, bien-être, café, création de contenu.",
+    role:"Recherche, conception et finalisation des logos", tools:"Illustrator", deliv:"Logos vectoriels, déclinaisons",
+    fit:"contain", images:["img/logos.jpg"] },
+  { title:"Make Concept — identité & cartes de visite", cat:"Identité", year:"",
+    desc:"Identité de Make Concept (sites internet, identité visuelle, supports de communication) : logo, cartes de visite recto-verso avec QR code, visuel d'annonce du site.",
+    role:"Logo, carte de visite, visuels réseaux", tools:"Illustrator, Photoshop", deliv:"Logo, carte de visite prête à imprimer, post réseaux",
+    images:["img/carte-make.jpg","img/logo-make.jpg","img/web-make.jpg"] },
+  { title:"Roll-ups AutoConfort & ErgoConfort", cat:"Print", year:"",
+    desc:"Deux kakémonos pour des enseignes sœurs : même structure de mise en page, couleurs propres à chaque marque, services, contact et QR code.",
+    role:"Conception, mise en page, préparation des fichiers grand format", tools:"Illustrator, Photoshop", deliv:"2 roll-ups (PLV)",
+    images:["img/plv-rollups.jpg"] },
+  { title:"Catalogue produits — sièges de direction", cat:"Print", year:"",
+    desc:"Pages de catalogue mobilier : photo d'ambiance, fiches produits avec caractéristiques et points forts, hiérarchie claire de l'information.",
+    role:"Mise en page, traitement des visuels", tools:"InDesign, Photoshop", deliv:"Catalogue imprimé",
+    images:["img/catalogue.jpg"] },
+  { title:"Mix 2 Saveurs — logo & communication", cat:"Web & réseaux", year:"",
+    desc:"Bar à salade et sandwichs : logo, bannière de présentation et visuel événementiel « Match Day » pour les réseaux sociaux.",
+    role:"Logo, bannière, visuels réseaux sociaux", tools:"Illustrator, Photoshop", deliv:"Logo, bannière, posts",
+    images:["img/web-mix2saveurs.jpg","img/web-matchday.jpg","img/logo-mix2saveurs.jpg"] },
+  { title:"Gash-Pi — lancement d'application", cat:"Print", year:"2022",
+    desc:"Application anti-gaspillage de produits péi : affiche imprimée et déclinaison carrée pour le web, avec QR code et badges stores.",
+    role:"Affiche, déclinaison web", tools:"Photoshop, Illustrator", deliv:"Affiche, visuel réseaux",
+    fit:"contain", images:["img/affiche-gashpi.jpg","img/web-gashpi.jpg"] },
+  { title:"Blind Test — Pink October", cat:"Print", year:"2025",
+    desc:"Affiche événementielle pour une soirée blind test d'Octobre Rose dans un hôtel Ibis.",
+    role:"Concept, typographie, mise en page", tools:"Photoshop", deliv:"Affiche",
+    fit:"contain", images:["img/affiche-blindtest.jpg"] },
+  { title:"Pizzeria — annonce d'application", cat:"Web & réseaux", year:"2022",
+    desc:"Visuel réseaux sociaux pour annoncer l'application d'une pizzeria.",
+    role:"Création du visuel", tools:"Photoshop", deliv:"Post réseaux sociaux",
+    images:["img/web-pizza.jpg"] },
+  { title:"Landiz — t-shirts brodés", cat:"Marquage textile", year:"2026",
+    desc:"Marque réunionnaise de t-shirts brodés. Motifs pensés pour la broderie, placements par zone (cœur, dos, nuque, manche) et contrôle des essais sur textile. Ici, le motif « Konyé » brodé en fils fluo et doré.",
+    role:"Participation aux visuels, aux maquettes et au contrôle des essais", tools:"Illustrator, Photoshop", deliv:"Motifs, maquettes produit, gabarits de placement",
+    images:["img/landiz-konye.jpg","https://d8j0ntlcm91z4.cloudfront.net/user_3LYVixClrA37WUjSfeEYdYaT3UH/hf_20261104_202320_c1e48885-e288-4ac8-b1f9-f1488974ed1d.png"] },
+  { title:"TenuePro — tenues professionnelles", cat:"Marquage textile", year:"2026",
+    desc:"Marque B2B de tenues personnalisées (broderie, flocage, DTF) à La Réunion : logo monogramme « TP », plaquette commerciale, maquettes de polos logotés. Visuels de mise en situation.",
+    role:"Participation à l'identité, à la plaquette et aux maquettes", tools:"Illustrator, InDesign", deliv:"Logo, plaquette, maquettes textile",
+    images:["https://d8j0ntlcm91z4.cloudfront.net/user_3LYVixClrA37WUjSfeEYdYaT3UH/hf_20261104_202321_707bea88-b885-4fa3-9bd0-be931652f740.png","https://d8j0ntlcm91z4.cloudfront.net/user_3LYVixClrA37WUjSfeEYdYaT3UH/hf_20261104_202322_087c8bbd-d18c-4ad4-8b2a-ac5509c13257.png"] },
+];
+
+const PH_COLORS = {"Identité":"var(--c)","Print":"var(--m)","Web & réseaux":"var(--y)","Marquage textile":"#9C968B"};
+const grid = document.getElementById('grid'), filters = document.getElementById('filters');
+const lb = document.getElementById('lb');
+
+function placeholder(cat){
+  const c = PH_COLORS[cat] || 'var(--ink-2)';
+  return `<div class="ph" style="background:
+    radial-gradient(circle at 30% 35%, ${c} 0 18%, transparent 18.5%),
+    radial-gradient(circle at 62% 60%, var(--ink) 0 10%, transparent 10.5%),
+    repeating-linear-gradient(45deg, var(--paper-2) 0 10px, var(--paper) 10px 20px)"><span>${cat}</span></div>`;
+}
+function media(src, cat, cls=''){
+  return `<img src="${src}" alt="" loading="lazy" class="${cls}" onerror="this.outerHTML=placeholder('${cat}')">`;
+}
+
+const cats = ["Tous", ...new Set(PROJECTS.map(p=>p.cat))];
+filters.innerHTML = cats.map((c,i)=>`<button class="chip ${i?'':'on'}" data-c="${c}">${c}</button>`).join('');
+filters.onclick = e=>{
+  const b = e.target.closest('.chip'); if(!b) return;
+  filters.querySelectorAll('.chip').forEach(x=>x.classList.toggle('on',x===b));
+  render(b.dataset.c);
+};
+
+function render(f="Tous"){
+  grid.innerHTML = PROJECTS.map((p,i)=>({p,i})).filter(({p})=>f==="Tous"||p.cat===f).map(({p,i})=>`
+    <button class="card reveal in" data-i="${i}">
+      <div class="thumb ${p.fit==='contain'?'contain':''}">${media(p.images[0],p.cat)}</div>
+      <div class="meta"><span>${p.cat}</span><span>${p.year||''}</span></div>
+      <h3>${p.title}</h3>
+    </button>`).join('');
+}
+render();
+
+grid.onclick = e=>{
+  const c = e.target.closest('.card'); if(!c) return;
+  const p = PROJECTS[c.dataset.i];
+  document.getElementById('lbMedia').innerHTML = p.images.map(s=>media(s,p.cat)).join('');
+  document.getElementById('lbCat').textContent = p.cat+(p.year?' · '+p.year:'');
+  document.getElementById('lbTitle').textContent = p.title;
+  document.getElementById('lbDesc').textContent = p.desc;
+  document.getElementById('lbRole').textContent = p.role;
+  document.getElementById('lbTools').textContent = p.tools;
+  document.getElementById('lbDeliv').textContent = p.deliv;
+  lb.showModal();
+};
+lb.addEventListener('click',e=>{ if(e.target===lb) lb.close(); });
+
+document.getElementById('yr').textContent = new Date().getFullYear();
+const io = new IntersectionObserver(es=>es.forEach(x=>{ if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);} }),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
